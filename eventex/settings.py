@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'eventex.core',
+    'eventex.subscriptions',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,8 @@ WSGI_APPLICATION = 'eventex.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-default_dburl = 'sqlite:///' + str(Path.joinpath(BASE_DIR, 'db.sqlite3').resolve())
+default_dburl = 'sqlite:///' + \
+    str(Path.joinpath(BASE_DIR, 'db.sqlite3').resolve())
 DATABASES = {
     'default': config('DATABASE_URL', default=default_dburl, cast=dburl)
 }
