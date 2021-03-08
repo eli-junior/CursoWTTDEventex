@@ -1,4 +1,7 @@
 .env
+WTTD.code-workspace
+.vscode/
+settings.json
 .idea
 .wttd
 *.sqlite3
