@@ -8,3 +8,4 @@ settings.json
 *.pyc
 __pycache__
 staticfiles
+.ypnb_checkpoints/
