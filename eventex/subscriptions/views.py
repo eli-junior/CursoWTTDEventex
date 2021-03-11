@@ -1,12 +1,11 @@
-from eventex.subscriptions.forms import SubscriptionForm
-from eventex.subscriptions.models import Subscription
-from django.template.loader import render_to_string
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.contrib import messages
 from django.conf import settings
 from django.core import mail
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render
+from django.template.loader import render_to_string
 
+from eventex.subscriptions.forms import SubscriptionForm
+from eventex.subscriptions.models import Subscription
 
 
 def subscribe(request):
@@ -21,22 +20,39 @@ def create(request):
     if not form.is_valid():
         return render(request, 'subscriptions/subscription_form.html', {'form': form})
 
-    _send_mail(template_name='subscriptions/subscription_email.txt',
-               context=form.cleaned_data,
-               subject='Confirmação de Inscrição',
-               from_=settings.DEFAULT_FROM_EMAIL,
-               to=form.cleaned_data['email'])
+    subscription = Subscription.objects.create(**form.cleaned_data)
 
-    Subscription.objects.create(**form.cleaned_data)
-
-    # Success Feedback
-    messages.success(request, 'Inscrição Realizada com Sucesso!')
-
-    return HttpResponseRedirect('/inscricao/')
+    _send_mail(
+        template_name='subscriptions/subscription_email.txt',
+        subject='Confirmação de Inscrição',
+        from_=settings.DEFAULT_FROM_EMAIL,
+        to=subscription.email,
+        context={'subscription': subscription}
+    )
+    return HttpResponseRedirect('/inscricao/%s/' % subscription.pk)
 
 
 def new(request):
-    return render(request, 'subscriptions/subscription_form.html', {'form': SubscriptionForm()})
+    return render(
+        request,
+        'subscriptions/subscription_form.html',
+        {'form': SubscriptionForm()}
+    )
+
+
+def detail(request, pk):
+    try:
+        subscription = Subscription.objects.get(pk=pk)
+
+    except Subscription.DoesNotExist:
+        raise Http404
+
+    else:
+        return render(
+            request,
+            'subscriptions/subscription_detail.html',
+            {'subscription': subscription}
+        )
 
 
 def _send_mail(subject, from_, to, template_name, context):
