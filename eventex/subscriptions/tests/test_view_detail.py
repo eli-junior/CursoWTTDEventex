@@ -10,14 +10,12 @@ class SubscriptionDetailGet(TestCase):
                       'email': 'elijr.net@gmail.com',
                       'phone': '61982110800',
                       }
-        self.obj = Subscription.objects.create(**self.dados)
-        self.resp = self.client.get('/inscricao/%d/' % self.obj.pk)
-
+        self.obj = Subscription.objects.create(id='092ade41ef85421f943d1b26ac02c5ed', **self.dados)
+        self.resp = self.client.get('/inscricao/092ade41ef85421f943d1b26ac02c5ed/')
 
     def test_get(self):
         """GET /inscrição/ must return code 200"""
         self.assertEqual(200, self.resp.status_code)
-
 
     def test_template(self):
         """Must use subscriptions/subscription_detail.html"""

@@ -27,6 +27,9 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+# Controller for email send
+SEND_EMAIL = config('SEND_EMAIL', default=False, cast=bool)
+
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
 
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')

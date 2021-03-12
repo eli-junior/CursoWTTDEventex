@@ -1,8 +1,12 @@
+from django.conf import settings
 from django.core import mail
 from django.test import TestCase
 
 from eventex.subscriptions.forms import SubscriptionForm
 from eventex.subscriptions.models import Subscription
+
+# Force Send Email for Tests
+settings.SEND_EMAIL = True
 
 
 class SubscribeGet(TestCase):
@@ -51,8 +55,8 @@ class SubscribePostValid(TestCase):
         self.email = mail.outbox[0]
 
     def test_post(self):
-        """Valid POST should redirect to /inscricao/1/"""
-        self.assertRedirects(self.resp, '/inscricao/1/')
+        """Valid POST should redirect to /inscricao/id/"""
+        self.assertRedirects(self.resp, self.resp.url)
 
     def test_send_subscribe_email(self):
         self.assertEqual(1, len(mail.outbox))

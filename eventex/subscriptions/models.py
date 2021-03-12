@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Subscription(models.Model):
+    id = models.CharField('ID', primary_key=True, serialize=False, max_length=33)
     name = models.CharField('nome', max_length=100)
     cpf = models.CharField('CPF', max_length=11)
     phone = models.CharField('telefone', max_length=20)
